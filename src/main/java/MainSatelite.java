@@ -1,8 +1,8 @@
 import Network.IRequestManager;
-import Network.MyServer;
+import Network.MyTCPServer;
 import Orchestration.CarOrchestrator;
 import Orchestration.MainOrchestrationTask;
-import Orchestration.SateliteRequestManager;
+import Orchestration.SatelliteRequestManager;
 import Util.MyVector2D;
 
 import java.util.Timer;
@@ -20,9 +20,9 @@ public class MainSatelite {
         TimerTask orchestrationTask = new MainOrchestrationTask(orchestrator);
 
         orchestrationTimer.schedule(orchestrationTask, 2000, 2000);
-        IRequestManager sateliteRequestManager = new SateliteRequestManager(orchestrator);
+        IRequestManager sateliteRequestManager = new SatelliteRequestManager(orchestrator);
 
-        MyServer server = new MyServer(4000, sateliteRequestManager);
+        MyTCPServer server = new MyTCPServer(4000, sateliteRequestManager);
         server.init();
         server.run();
     }

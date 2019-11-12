@@ -13,7 +13,7 @@ public class MainOrchestrationTask extends TimerTask {
     @Override
     public void run() {
         orchestrator.simulate();
-        orchestrator.print();
+        // orchestrator.print();
     }
 }
 

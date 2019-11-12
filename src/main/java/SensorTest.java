@@ -1,7 +1,6 @@
 import CarManagement.LocationSensor;
 import CarManagement.Sensor;
 import CarManagement.SensorRequestTask;
-import Network.MyClient;
 
 import java.util.Timer;
 import java.util.TimerTask;

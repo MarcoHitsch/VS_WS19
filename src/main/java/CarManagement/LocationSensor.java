@@ -1,6 +1,6 @@
 package CarManagement;
 
-import Network.MyClient;
+import Network.MyTCPClient;
 import Network.MyUDPClient;
 import Util.MyVector2D;
 
@@ -19,7 +19,7 @@ public class LocationSensor extends Sensor{
     @Override
     public void request(String ip, int port) {
         try {
-            MyClient client = new MyClient(ip, port);
+            MyTCPClient client = new MyTCPClient(ip, port);
             client.send(String.valueOf(carId));
             String response = client.getResponse().trim();
             currentLocation = MyVector2D.parse(response);

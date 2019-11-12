@@ -1,3 +1,4 @@
+import Network.HttpRequestManager;
 import Network.MyTCPClient;
 import Network.MyTCPServer;
 import Network.MyUDPServer;
@@ -8,8 +9,10 @@ import java.util.List;
 
 public class CarComputer {
     public static void main(String[] args) throws Exception {
+        HttpRequestManager httpManager = new HttpRequestManager();
+
         MyUDPServer sensorServer = new MyUDPServer(4001);
-        MyTCPServer httpServer = new MyTCPServer(80, null);
+        MyTCPServer httpServer = new MyTCPServer(8000, httpManager);
 
         sensorServer.init();
         httpServer.init();

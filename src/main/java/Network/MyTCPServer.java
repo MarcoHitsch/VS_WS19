@@ -51,9 +51,8 @@ public class MyTCPServer implements Runnable {
                     } else if (key.isWritable()) {
                         this.write(key);
                     }
-
-                    keys.remove(key);
                 }
+                keys.clear();
             }
         } catch (Exception e) {
             e.printStackTrace();

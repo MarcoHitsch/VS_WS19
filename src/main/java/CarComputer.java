@@ -1,18 +1,55 @@
+import Network.HttpConfig;
 import Network.HttpRequestManager;
+import Network.JSONConvert;
 import Network.MyTCPClient;
 import Network.MyTCPServer;
 import Network.MyUDPServer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarComputer {
     public static void main(String[] args) throws Exception {
-        HttpRequestManager httpManager = new HttpRequestManager();
+
+        /*
+        HttpConfig config = new HttpConfig("C:\\www", 8000);
+        ObjectMapper mapper = new ObjectMapper();
+        File file = new File("HttpConfig.json");
+        try {
+            // Serialize Java object info JSON file.
+            mapper.writeValue(file, config);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
+
+        HttpConfig config = JSONConvert.deserialize("HttpConfig.json", HttpConfig.class);
+
+
+
+        /*
+        File file = new File("HttpConfig.json");
+        ObjectMapper mapper = new ObjectMapper();
+        HttpConfig config = new HttpConfig("", 0);
+        try {
+            config = mapper.readValue(file, HttpConfig.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+
+
+
+
+        HttpRequestManager httpManager = new HttpRequestManager(config.getRootFolder());
 
         MyUDPServer sensorServer = new MyUDPServer(4001);
-        MyTCPServer httpServer = new MyTCPServer(8000, httpManager);
+        MyTCPServer httpServer = new MyTCPServer(config.getPort(), httpManager);
 
         sensorServer.init();
         httpServer.init();
@@ -27,4 +64,6 @@ public class CarComputer {
         for(Thread t : serverThreads)
             t.join();
     }
+
+
 }

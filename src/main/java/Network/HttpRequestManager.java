@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 public class HttpRequestManager implements IRequestManager {
     private String requestText;
     private String requestResource;
+    private String rootFolder;
     private boolean isGet = false;
     private String requestRegex = "(GET|POST)\\s*(\\/.*)\\s*HTTP";
     private String htmlTemplate =
@@ -17,7 +18,8 @@ public class HttpRequestManager implements IRequestManager {
             "{html}";
     private Pattern httpPattern;
 
-    public HttpRequestManager(){
+    public HttpRequestManager(String rootFolder){
+        this.rootFolder = rootFolder;
         httpPattern = Pattern.compile(requestRegex);
     }
 
@@ -45,7 +47,7 @@ public class HttpRequestManager implements IRequestManager {
             if(requestResource.equals("/"))
                 requestResource = requestResource + "index.html";
             try{
-                File file = new File(getClass().getClassLoader().getResource("www" + requestResource).getFile());
+                File file = new File(rootFolder + requestResource.replace("/", "\\"));
                 htmlString = new String(Files.readAllBytes(file.toPath()));
             }
             catch(Exception e){
@@ -62,3 +64,4 @@ public class HttpRequestManager implements IRequestManager {
         return response;
     }
 }
+

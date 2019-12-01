@@ -25,7 +25,8 @@ public class LocationSensor extends Sensor{
             currentLocation = MyVector2D.parse(response);
             System.out.println(response);
         }
-        catch(Exception e){
+        catch(Exception e)
+        {
             System.out.println(e);
         }
     }

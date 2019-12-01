@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/src/main/main.iml" filepath="$PROJECT_DIR$/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VS.Autoprojekt.iml" filepath="$PROJECT_DIR$/.idea/modules/VS.Autoprojekt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VS.Autoprojekt_main.iml" filepath="$PROJECT_DIR$/.idea/modules/VS.Autoprojekt_main.iml" group="VS.Autoprojekt" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VS.Autoprojekt_test.iml" filepath="$PROJECT_DIR$/.idea/modules/VS.Autoprojekt_test.iml" group="VS.Autoprojekt" />
     </modules>
   </component>
 </project>

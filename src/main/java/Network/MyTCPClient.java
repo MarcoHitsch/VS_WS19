@@ -81,34 +81,40 @@ public class MyTCPClient {
     private String read(SelectionKey key) throws IOException
     {
         SocketChannel channel = (SocketChannel) key.channel();
-        ByteBuffer readBuffer = ByteBuffer.allocate(1024);
-        readBuffer.clear();
-        int length;
-        try {
-            length = channel.read(readBuffer);
-        } catch (IOException e) {
-            System.out.println("Reading problem, closing connection");
-            key.cancel();
-            channel.close();
-            return "";
-        }
-        if (length == -1) {
-            System.out.println("Nothing was read from server");
+
+        ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
+        int numRead = channel.read(lengthBuffer);
+
+        if (numRead == -1) {
             channel.close();
             key.cancel();
             return "";
         }
-        readBuffer.flip();
-        byte[] buff = new byte[1024];
-        readBuffer.get(buff, 0, length);
-        String response = new String(buff);
-        return response;
+
+        lengthBuffer.flip();
+        int messageLength = lengthBuffer.getInt();
+
+        ByteBuffer messageBuffer = ByteBuffer.allocate(messageLength);
+        numRead = channel.read(messageBuffer);
+        messageBuffer.flip();
+
+        byte[] buff = new byte[messageLength];
+        messageBuffer.get(buff, 0, numRead);
+        String result = new String(buff);
+        return result;
     }
 
     private void write(SelectionKey key) throws IOException
     {
         SocketChannel channel = (SocketChannel) key.channel();
-        channel.write(ByteBuffer.wrap(message.getBytes()));
+        byte[] messageBytes = message.getBytes();
+
+        ByteBuffer buffer = ByteBuffer.allocate(messageBytes.length + 4);
+        buffer.putInt(messageBytes.length);
+        buffer.put(messageBytes);
+        buffer.flip();
+
+        channel.write(buffer);
 
         key.interestOps(OP_READ);
     }

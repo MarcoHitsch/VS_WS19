@@ -24,5 +24,7 @@ public class HttpConfig {
         this.rootFolder = rootFolder;
         this.port = port;
     }
+
+    public HttpConfig(){}
 }
 

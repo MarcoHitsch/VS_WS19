@@ -78,7 +78,14 @@ public class MyTCPServer implements Runnable {
         SocketChannel channel = (SocketChannel) key.channel();
 
         String response = requestManager.getResponse();
-        channel.write(ByteBuffer.wrap(response.getBytes()));
+        byte[] messageBytes = response.getBytes();
+
+        ByteBuffer buffer = ByteBuffer.allocate(messageBytes.length + 4);
+        buffer.putInt(messageBytes.length);
+        buffer.put(messageBytes);
+        buffer.flip();
+
+        channel.write(buffer);
 
         channel.close();
         key.cancel();
@@ -86,8 +93,8 @@ public class MyTCPServer implements Runnable {
 
     private void read(SelectionKey key) throws Exception {
         SocketChannel channel = (SocketChannel) key.channel();
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int numRead = channel.read(buffer);
+        ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
+        int numRead = channel.read(lengthBuffer);
 
         if (numRead == -1) {
             channel.close();
@@ -95,9 +102,15 @@ public class MyTCPServer implements Runnable {
             return;
         }
 
-        buffer.flip();
-        byte[] buff = new byte[1024];
-        buffer.get(buff, 0, numRead);
+        lengthBuffer.flip();
+        int messageLength = lengthBuffer.getInt();
+
+        ByteBuffer messageBuffer = ByteBuffer.allocate(messageLength);
+        numRead = channel.read(messageBuffer);
+        messageBuffer.flip();
+
+        byte[] buff = new byte[messageLength];
+        messageBuffer.get(buff, 0, numRead);
         String result = new String(buff);
         requestManager.receivedRequest(result);
 

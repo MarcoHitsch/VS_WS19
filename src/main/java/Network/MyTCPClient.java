@@ -82,38 +82,20 @@ public class MyTCPClient {
     {
         SocketChannel channel = (SocketChannel) key.channel();
 
-        ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
-        int numRead = channel.read(lengthBuffer);
-
-        if (numRead == -1) {
+        try {
+            return NetworkHelper.readMessageFromChannel(channel);
+        } catch (Exception e) {
+            e.printStackTrace();
             channel.close();
             key.cancel();
             return "";
         }
-
-        lengthBuffer.flip();
-        int messageLength = lengthBuffer.getInt();
-
-        ByteBuffer messageBuffer = ByteBuffer.allocate(messageLength);
-        numRead = channel.read(messageBuffer);
-        messageBuffer.flip();
-
-        byte[] buff = new byte[messageLength];
-        messageBuffer.get(buff, 0, numRead);
-        String result = new String(buff);
-        return result;
     }
 
     private void write(SelectionKey key) throws IOException
     {
         SocketChannel channel = (SocketChannel) key.channel();
-        byte[] messageBytes = message.getBytes();
-
-        ByteBuffer buffer = ByteBuffer.allocate(messageBytes.length + 4);
-        buffer.putInt(messageBytes.length);
-        buffer.put(messageBytes);
-        buffer.flip();
-
+        ByteBuffer buffer = NetworkHelper.getBufferForMessage(message);
         channel.write(buffer);
 
         key.interestOps(OP_READ);

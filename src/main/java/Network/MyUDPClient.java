@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.nio.channels.SocketChannel;
+import java.rmi.server.ExportException;
 
 public class MyUDPClient {
     InetSocketAddress address;
@@ -18,3 +20,4 @@ public class MyUDPClient {
         System.out.println("Sent: " + bytesSent + " bytes of data");
     }
 }
+

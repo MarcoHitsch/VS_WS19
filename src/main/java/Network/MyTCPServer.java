@@ -78,12 +78,7 @@ public class MyTCPServer implements Runnable {
         SocketChannel channel = (SocketChannel) key.channel();
 
         String response = requestManager.getResponse();
-        byte[] messageBytes = response.getBytes();
-
-        ByteBuffer buffer = ByteBuffer.allocate(messageBytes.length + 4);
-        buffer.putInt(messageBytes.length);
-        buffer.put(messageBytes);
-        buffer.flip();
+        ByteBuffer buffer = NetworkHelper.getBufferForMessage(response);
 
         channel.write(buffer);
 
@@ -91,27 +86,18 @@ public class MyTCPServer implements Runnable {
         key.cancel();
     }
 
-    private void read(SelectionKey key) throws Exception {
+    private void read(SelectionKey key) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
-        ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
-        int numRead = channel.read(lengthBuffer);
 
-        if (numRead == -1) {
+        String result = "";
+        try {
+            result = NetworkHelper.readMessageFromChannel(channel);
+        } catch (Exception e) {
+            e.printStackTrace();
             channel.close();
             key.cancel();
-            return;
         }
 
-        lengthBuffer.flip();
-        int messageLength = lengthBuffer.getInt();
-
-        ByteBuffer messageBuffer = ByteBuffer.allocate(messageLength);
-        numRead = channel.read(messageBuffer);
-        messageBuffer.flip();
-
-        byte[] buff = new byte[messageLength];
-        messageBuffer.get(buff, 0, numRead);
-        String result = new String(buff);
         requestManager.receivedRequest(result);
 
         key.interestOps(SelectionKey.OP_WRITE);

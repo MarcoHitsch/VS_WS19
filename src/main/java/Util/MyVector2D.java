@@ -1,6 +1,6 @@
 package Util;
 
-public class MyVector2D {
+public class    MyVector2D {
     private double xPart;
     private double yPart;
 

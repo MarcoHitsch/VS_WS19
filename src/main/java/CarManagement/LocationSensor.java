@@ -2,6 +2,7 @@ package CarManagement;
 
 import Network.MyTCPClient;
 import Network.MyUDPClient;
+import Util.JSONConvert;
 import Util.MyVector2D;
 
 import java.io.IOException;
@@ -34,7 +35,8 @@ public class LocationSensor extends Sensor{
     @Override
     public void sendInfo(String ip, int port) throws IOException {
         try{
-            String locationData = "LOC:" + currentLocation.toString();
+            SensorData data = new SensorData(carId, SensorType.Location, currentLocation.toString());
+            String locationData = JSONConvert.serialize(data, SensorData.class);
             udpClient.send(locationData);
         }
         catch(Exception e){

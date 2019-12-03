@@ -1,1 +1,75 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Vt</title><base href="./"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/x-icon" href="favicon.ico"><link href="styles.ac89bfdd6de82636b768.bundle.css" rel="stylesheet"/></head><body><app-root></app-root><script type="text/javascript" src="inline.318b50c57b4eba3d437b.bundle.js"></script><script type="text/javascript" src="polyfills.9334b801f8fef5513fcf.bundle.js"></script><script type="text/javascript" src="main.3ac86cb7e6eb7c68328e.bundle.js"></script></body></html>
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h1>Verteilte Systeme Cars</h1>
+    <button onclick="myFunction()">Click me</button>
+
+    <div id="field" style="height:500px;width:500px; position:relative; border: 1px solid #00ff00;">
+
+    </div>
+
+</body>
+<script>
+    var cars = [];
+    var top = 0;
+    var left = 0;
+    var url = "'https://jsonplaceholder.typicode.com/todos/1"
+
+    function myFunction() {
+        setPosition(top++, left++)
+    }
+
+    function httpGetAsync(theUrl) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", theUrl, true);
+        xhr.onload = function (e) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.error(xhr.statusText);
+                }
+            }
+        };
+        xhr.onerror = function (e) {
+            console.error(xhr.statusText);
+        };
+        xhr.send(null)
+    }
+
+    function drawCars() {
+        for (let j = 0; j < 2; j++) {
+            document.getElementById("field").appendChild(cars[j]);
+        }
+    }
+
+    function setPosition(top, left) {
+        for (let j = 0; j < 2; j++) {
+            cars[j].style.top = top + "px";
+            cars[j].style.left = left + "px";
+        }
+    }
+
+    for (let i = 0; i < 2; i++) {
+        let car1 = document.createElement("div");
+        car1.style.width = "10px";
+        car1.style.height = "10px";
+        car1.style.background = i == 0 ? "red" : "#00ff00";
+        car1.style.position = "absolute";
+        car1.style.top = "0px";
+        car1.style.left = i == 0 ? "0px" : "10px";
+        car1.innerHTML = "";
+        cars[i] = car1;
+        document.getElementById("field").appendChild(car1);
+    }
+    drawCars();
+
+    const interval = setInterval(function () {
+        setPosition(top++, left++);
+        httpGetAsync(url)
+    }, 500);
+</script>
+
+</html>

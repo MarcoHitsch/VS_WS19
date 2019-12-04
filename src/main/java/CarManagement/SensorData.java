@@ -3,7 +3,7 @@ package CarManagement;
 public class SensorData{
     private int carId;
     private SensorType type;
-    private String payLoad;
+    private Object payLoad;
 
     public int getCarId() {
         return carId;
@@ -21,15 +21,15 @@ public class SensorData{
         this.type = type;
     }
 
-    public String getPayLoad() {
+    public Object getPayLoad() {
         return payLoad;
     }
 
-    public void setPayLoad(String payLoad) {
+    public void setPayLoad(Object payLoad) {
         this.payLoad = payLoad;
     }
 
-    public SensorData(int carId, SensorType type, String payLoad) {
+    public SensorData(int carId, SensorType type, Object payLoad) {
         this.carId = carId;
         this.type = type;
         this.payLoad = payLoad;

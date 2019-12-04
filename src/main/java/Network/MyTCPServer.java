@@ -14,10 +14,12 @@ public class MyTCPServer implements Runnable {
     private IRequestManager requestManager;
     private ServerSocketChannel serverChannel;
     private Selector selector;
+    private Boolean useCustomProtocollForMessage;
 
-    public MyTCPServer(int port, IRequestManager requestManager){
+    public MyTCPServer(int port, IRequestManager requestManager, Boolean useCustomProtocollForMessage){
         listenAddress = new InetSocketAddress(port);
         this.requestManager = requestManager;
+        this.useCustomProtocollForMessage = useCustomProtocollForMessage;
     }
 
     public void init() {
@@ -78,7 +80,11 @@ public class MyTCPServer implements Runnable {
         SocketChannel channel = (SocketChannel) key.channel();
 
         String response = requestManager.getResponse();
-        ByteBuffer buffer = NetworkHelper.getBufferForMessage(response);
+        ByteBuffer buffer;
+        if(useCustomProtocollForMessage)
+            buffer = NetworkHelper.getBufferForMessage(response);
+        else
+            buffer = NetworkHelper.getBufferForMessageWithoutLength(response);
 
         channel.write(buffer);
 
@@ -91,7 +97,10 @@ public class MyTCPServer implements Runnable {
 
         String result = "";
         try {
-            result = NetworkHelper.readMessageFromChannel(channel);
+            if(useCustomProtocollForMessage)
+                result = NetworkHelper.readMessageFromChannel(channel);
+            else
+                result = NetworkHelper.readMessageFromChannelWithoutLength(channel);
         } catch (Exception e) {
             e.printStackTrace();
             channel.close();

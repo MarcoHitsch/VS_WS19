@@ -3,6 +3,7 @@ package Network;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
 import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
 public class NetworkHelper{
@@ -51,5 +52,32 @@ public class NetworkHelper{
         byte[] buff = new byte[messageLength];
         messageBuffer.get(buff, 0, messageBuffer.limit());
         return new String(buff);
+    }
+
+    public static ByteBuffer getBufferForMessageWithoutLength(String message) {
+        byte[] messageBytes = message.getBytes();
+
+        ByteBuffer buffer = ByteBuffer.allocate(messageBytes.length);
+        buffer.put(messageBytes);
+        buffer.flip();
+
+        return buffer;
+    }
+
+    public static String readMessageFromChannelWithoutLength(SocketChannel channel) throws Exception {
+
+        int numRead = 0;
+        String result = "";
+
+        ByteBuffer buffer = ByteBuffer.allocate(200);
+        while((numRead = channel.read(buffer)) > 0){
+            buffer.flip();
+            byte[] buff = new byte[numRead];
+            buffer.get(buff, 0, numRead);
+            result += new String(buff);
+            buffer = ByteBuffer.allocate(200);
+        }
+
+        return result;
     }
 }

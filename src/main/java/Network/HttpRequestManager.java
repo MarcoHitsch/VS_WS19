@@ -13,7 +13,7 @@ public class HttpRequestManager implements IRequestManager {
     private String requestRegex = "(GET|POST)\\s*(\\/.*)\\s*HTTP";
     private String htmlTemplate =
             "HTTP/1.1 200 Ok\r\n" +
-            "Content-type: text/html\r\n" +
+            "Content-type: {contenttype}\r\n" +
             "Content-length: {length}\r\n\r\n" +
             "{html}";
     private Pattern httpPattern;
@@ -46,7 +46,7 @@ public class HttpRequestManager implements IRequestManager {
 
             if(requestResource.equals("/"))
                 requestResource = requestResource + "index.html";
-            try{
+            try {
                 File file = new File(rootFolder + requestResource.replace("/", "\\"));
                 htmlString = new String(Files.readAllBytes(file.toPath()));
             }
@@ -54,11 +54,17 @@ public class HttpRequestManager implements IRequestManager {
                 System.out.println(e);
             }
 
+            String extension = requestResource.substring(requestResource.lastIndexOf("."));
+            String contentType = "text/html";
+            if(extension.equals(".json"))
+                contentType = "application/json";
+
             if(htmlString.isEmpty())
                 htmlString = "<html>Fehler</html>";
             response = htmlTemplate
                     .replace("{length}", String.valueOf(htmlString.length()))
-                    .replace("{html}", htmlString);
+                    .replace("{html}", htmlString)
+                    .replace("{contenttype}", contentType);
         }
 
         return response;

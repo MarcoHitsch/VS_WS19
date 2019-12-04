@@ -22,7 +22,7 @@ public class MainSatelite {
         orchestrationTimer.schedule(orchestrationTask, 2000, 2000);
         IRequestManager sateliteRequestManager = new SatelliteRequestManager(orchestrator);
 
-        MyTCPServer server = new MyTCPServer(4000, sateliteRequestManager);
+        MyTCPServer server = new MyTCPServer(4000, sateliteRequestManager, true);
         server.init();
         server.run();
     }

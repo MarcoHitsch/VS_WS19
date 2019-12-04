@@ -35,7 +35,7 @@ public class LocationSensor extends Sensor{
     @Override
     public void sendInfo(String ip, int port) throws IOException {
         try{
-            SensorData data = new SensorData(carId, SensorType.Location, currentLocation.toString());
+            SensorData data = new SensorData(carId, SensorType.Location, currentLocation);
             String locationData = JSONConvert.serialize(data, SensorData.class);
             udpClient.send(locationData);
         }

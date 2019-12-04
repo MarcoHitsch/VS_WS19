@@ -15,7 +15,7 @@
     var cars = [];
     var top = 0;
     var left = 0;
-    var url = "'https://jsonplaceholder.typicode.com/todos/1"
+    var url = "http://localhost:8000/car.json"
 
     function myFunction() {
         setPosition(top++, left++)
@@ -28,6 +28,7 @@
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     console.log(xhr.responseText);
+                    setPosition(xhr.responseText.payload._xPart, xhr.responseText.payload._yPart)
                 } else {
                     console.error(xhr.statusText);
                 }
@@ -67,7 +68,7 @@
     drawCars();
 
     const interval = setInterval(function () {
-        setPosition(top++, left++);
+        <!--setPosition(top++, left++);-->
         httpGetAsync(url)
     }, 500);
 </script>

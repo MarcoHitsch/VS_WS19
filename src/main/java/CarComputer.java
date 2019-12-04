@@ -11,7 +11,7 @@ public class CarComputer {
         SensorRequestManager sensorManager = new SensorRequestManager(config.getRootFolder() + "\\car.json");
 
         MyUDPServer sensorServer = new MyUDPServer(4001, sensorManager);
-        MyTCPServer httpServer = new MyTCPServer(config.getPort(), httpManager);
+        MyTCPServer httpServer = new MyTCPServer(config.getPort(), httpManager, false);
 
         sensorServer.init();
         httpServer.init();

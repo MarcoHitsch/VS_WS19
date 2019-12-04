@@ -7,7 +7,7 @@ public class    MyVector2D {
     public static MyVector2D parse(String value) throws Exception {
 
         if(!value.matches("\\{[0-9]+[.][0-9]+\\|[0-9]+[.][0-9]+\\}"))
-            throw new Exception("Input: " + value + " ist nicht im Format {x.x|y.y}");
+            throw new Exception("Input: " + value + " ist nicht im Format {get_xPart.get_xPart|get_yPart.get_yPart}");
 
         String cleanedValue = value.trim().replace("{", "").replace("}", "");
         String[] values = cleanedValue.split("\\|");
@@ -17,15 +17,17 @@ public class    MyVector2D {
         return new MyVector2D(x, y);
     }
 
-    public double x() { return xPart; }
-    public double y() { return yPart; }
+    public double get_xPart() { return xPart; }
+    public double get_yPart() { return yPart; }
 
     public MyVector2D(double x, double y){
         xPart = x;
         yPart = y;
     }
 
-    public double length(){
+    public MyVector2D(){}
+
+    private double length(){
         return Math.sqrt(Math.pow(xPart, 2) + Math.pow(yPart, 2));
     }
 
@@ -34,7 +36,7 @@ public class    MyVector2D {
     }
 
     public MyVector2D add(MyVector2D value){
-        return new MyVector2D(xPart+value.x(), yPart+value.y());
+        return new MyVector2D(xPart+value.get_xPart(), yPart+value.get_yPart());
     }
 
     public MyVector2D normalize(){

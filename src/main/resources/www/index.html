@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 
-<body>
+<body style="background:#12121f">
+<div style="float: none; position: relative; display: block; margin: 0 auto;height:500px;width:500px; ">
 
-    <h1>Verteilte Systeme Cars</h1>
-    <button onclick="myFunction()">Click me</button>
-
-    <div id="field" style="height:500px;width:500px; position:relative; border: 1px solid #00ff00;">
+    <div style="color:#ffffffdd;text-align:center;font-size:2em">Verteilte Systeme</div>
+    <div style="color:#ffffff77;text-align:center;font-size:1.2em;margin-bottom:20px">Car-Computer</div>
+    <div id="field"
+         style="height:500px;width:500px; position:relative; border: 1px solid #ffffff22;background:#ffffff0f">
 
     </div>
+    <button onclick="myFunction()" style=" display: block;position: relative; float: none;margin: 20px auto;
+        width:250px;height:50px;color:white;background:#ffffff22;border:1px solid #ffffff22">Click me</button>
+</div>
 
 </body>
 <script>
@@ -18,7 +22,8 @@
     var url = "http://localhost:8000/car.json"
 
     function myFunction() {
-httpGetAsync (url)
+        httpGetAsync(url)
+        console.log("request data from serve manually...")
     }
 
     function httpGetAsync(theUrl) {
@@ -27,9 +32,7 @@ httpGetAsync (url)
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    <!--console.log(xhr.responseText);-->
                     let car = JSON.parse(xhr.responseText)
-                    console.log(car.payLoad._xPart)
                     setPosition(car.payLoad._xPart, car.payLoad._yPart)
                 } else {
                     console.error(xhr.statusText);
@@ -43,23 +46,24 @@ httpGetAsync (url)
     }
 
     function drawCars() {
-        for (let j = 0; j < 2; j++) {
+        for (let j = 0; j < 1; j++) {
             document.getElementById("field").appendChild(cars[j]);
         }
     }
 
     function setPosition(top, left) {
-        for (let j = 0; j < 2; j++) {
+        for (let j = 0; j < 1; j++) {
             cars[j].style.top = top + "px";
             cars[j].style.left = left + "px";
         }
     }
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 1; i++) {
         let car1 = document.createElement("div");
         car1.style.width = "10px";
         car1.style.height = "10px";
-        car1.style.background = i == 0 ? "red" : "#00ff00";
+        car1.style.borderRadius = "5px"
+        car1.style.background = i == 0 ? "#1ce6a2" : "#00ff00";
         car1.style.position = "absolute";
         car1.style.top = "0px";
         car1.style.left = i == 0 ? "0px" : "10px";
@@ -70,8 +74,8 @@ httpGetAsync (url)
     drawCars();
 
     const interval = setInterval(function () {
-        <!--setPosition(top++, left++);-->
-       httpGetAsync (url)
+        //setPosition(top++, left++);
+        httpGetAsync (url)
     }, 1000);
 </script>
 

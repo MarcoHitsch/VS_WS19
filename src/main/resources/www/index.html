@@ -18,7 +18,7 @@
     var url = "http://localhost:8000/car.json"
 
     function myFunction() {
-        setPosition(top++, left++)
+httpGetAsync (url)
     }
 
     function httpGetAsync(theUrl) {
@@ -27,8 +27,10 @@
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    setPosition(xhr.responseText.payload._xPart, xhr.responseText.payload._yPart)
+                    <!--console.log(xhr.responseText);-->
+                    let car = JSON.parse(xhr.responseText)
+                    console.log(car.payLoad._xPart)
+                    setPosition(car.payLoad._xPart, car.payLoad._yPart)
                 } else {
                     console.error(xhr.statusText);
                 }
@@ -69,8 +71,8 @@
 
     const interval = setInterval(function () {
         <!--setPosition(top++, left++);-->
-        httpGetAsync(url)
-    }, 500);
+       httpGetAsync (url)
+    }, 1000);
 </script>
 
 </html>
